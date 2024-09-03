@@ -20,7 +20,9 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-
+    - name: Print
+      run: echo ${{secrets.AZURE_CREDENTIALS}}
+      shell: bash
     - name: Build
       run: npm run build  # Run your build script if needed
 
