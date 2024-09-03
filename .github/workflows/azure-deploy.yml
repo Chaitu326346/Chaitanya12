@@ -7,29 +7,17 @@ on:
       - main  # Trigger deployment on push to the 'main' branch
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'  # Specify the Node.js version to use
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: acp-compliance-policy56-9e50befbfa
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: .
+          slot-name: production
 
-    - name: Install dependencies
-      run: npm install
-    - name: Print
-      run: echo ${{secrets.AZURE_WEBAPP_NAME}}
-      shell: bash
-    - name: Build
-      run: npm run build  # Run your build script if needed
-
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-        package: '.'  # Path to the package to deploy, adjust if necessary
